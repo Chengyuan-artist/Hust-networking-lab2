@@ -11,12 +11,14 @@
 #include "GBNRdtSender.h"
 #include "SRRdtReceiver.h"
 #include "SRRdtSender.h"
+#include "SimpleTcpReceiver.h"
+#include "SimpleTcpSender.h"
 
 int main(int argc, char* argv[])
 {
-	RdtSender *ps = new SRRdtSender();
-	RdtReceiver * pr = new SRRdtReceiver();
-	// pns->setRunMode(0);  //VERBOS模式
+	RdtSender *ps = new SimpleTcpSender();
+	RdtReceiver * pr = new SimpleTcpReceiver();
+	pns->setRunMode(0);  //VERBOS模式
 	pns->setRunMode(1);  //安静模式
 	pns->init();
 	pns->setRtdSender(ps);

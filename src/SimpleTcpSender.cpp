@@ -56,17 +56,24 @@ void SimpleTcpSender::receive(const Packet &ackPkt) {
                 pns->startTimer(SENDER, Configuration::TIME_OUT, send_base);
             }
         } else {
-            // ackPkt.acknum == send_base
-            if (ack_buf.ack_num == ackPkt.acknum) {
+            if(1)  {
+                if (ack_buf.ack_num == ackPkt.acknum) {
                 ack_buf.count ++;
-            } else {
-                ack_buf.ack_num = ackPkt.acknum;
-                ack_buf.count = 1;
-            }
+                } else {
+                    ack_buf.ack_num = ackPkt.acknum;
+                    ack_buf.count = 1;
+                }
 
-            if (ack_buf.count == 3) {
-                // Fast retransmit
-                pns->sendToNetworkLayer(RECEIVER, send_buf[ack_buf.ack_num].packet);
+                if (ack_buf.count == 3) {
+                    // Fast retransmit
+                    pns->sendToNetworkLayer(RECEIVER, send_buf[ack_buf.ack_num].packet);
+                    ack_buf.count = 0;
+                    ack_buf.ack_num = -1;
+                }
+            } else {
+                cout << "SimpleTcpSender::receive:" <<
+                        "Strange thing happens" << endl;
+                pns->sendToNetworkLayer(RECEIVER, send_buf[send_base].packet);
             }
         }
     } // else do nothing
