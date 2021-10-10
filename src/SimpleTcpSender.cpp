@@ -47,7 +47,7 @@ void SimpleTcpSender::receive(const Packet &ackPkt) {
     if (!is_corrupt(ackPkt)) {
         // ackPkt.acknum means the seq num that the receiver wants
         int diff = (ackPkt.acknum - send_base + MOD) % MOD;
-        if (diff < N && diff > 0) { // ackPkt.acknum > send_base while falling in the window
+        if (diff <= N && diff > 0) { // ackPkt.acknum > send_base while falling in the window
             // stop the older timer
             pns->stopTimer(SENDER, send_base);
             send_base = ackPkt.acknum;
@@ -73,7 +73,6 @@ void SimpleTcpSender::receive(const Packet &ackPkt) {
             } else {
                 cout << "SimpleTcpSender::receive:" <<
                         "Strange thing happens" << endl;
-                pns->sendToNetworkLayer(RECEIVER, send_buf[send_base].packet);
             }
         }
     } // else do nothing
