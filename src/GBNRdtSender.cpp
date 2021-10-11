@@ -30,6 +30,13 @@ void GBNRdtSender::receive(const Packet &ackPkt) {
         base = (ackPkt.acknum + 1) % (1 << ByteLen);
 
         cout << "GBNRdtSender::receive: the ackPkt.acknum = " << ackPkt.acknum << endl;
+        cout << NAME << "the window is sliding to ";
+        cout << "(";
+        int i;
+        for (i = base; (i - base + MOD) % MOD < WinSize - 1; i = (i + 1) % MOD) {
+            cout << i << " ";
+        }
+        cout << i << ")" << endl;
 
         if (base == nextSeqNum) {
             pns->stopTimer(SENDER, onTimeSeq);
@@ -60,8 +67,7 @@ bool GBNRdtSender::getWaitingState() {
     return !flag;
 }
 
-GBNRdtSender::GBNRdtSender() : base(1), nextSeqNum(1), WinSize(GBNConfig::WinSize), ByteLen(GBNConfig::ByteLen),
-                               onTimeSeq(1) {
+GBNRdtSender::GBNRdtSender() : base(1), nextSeqNum(1), WinSize(GBNConfig::WinSize), ByteLen(GBNConfig::ByteLen), onTimeSeq(1), MOD(1 << Configuration::BYTE_LEN) {
 
 }
 
