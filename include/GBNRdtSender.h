@@ -18,11 +18,16 @@ private:
     int nextSeqNum;
     const int WinSize;
     const int ByteLen; // Sequence encoding's byte length
+    const int MOD; // 1 << ByteLen
     int onTimeSeq; // the sequence that is on timer
 
     Packet sndPck[GBNConfig::MAXN];
 
     Packet make_pkg(int seq, const Message &message);
+
+    const string NAME = "GBNRdtSender:";
+
+
 public:
     bool send(const Message &message) override;
 

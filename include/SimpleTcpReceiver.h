@@ -20,6 +20,8 @@ private:
         Packet packet;
     }rev_buf[MAXN];
 
+    const string NAME = "SimpleTcpReceiver:";
+
 
     bool is_corrupt(const Packet &packet);
 

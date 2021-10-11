@@ -48,6 +48,16 @@ void SRRdtSender::receive(const Packet &ackPkt) {
                         
                         send_base = (send_base + 1) % MOD;
                     }
+
+                    cout << NAME << "the window is sliding to ";
+                    cout << "(";
+                    int i;
+                    for (i = send_base; (i - send_base + MOD) % MOD < N - 1; i = (i + 1) % MOD) {
+                        cout << i << " ";
+                    }
+                    cout << i << ")" << endl;
+                    
+
                     return; //just to notify; you mustn't do anything after
                 }
             } else {

@@ -14,6 +14,8 @@ private:
     const int ByteLen; // seq byte len
     const int MOD;  // 1 << ByteLen
 
+    const string NAME = "SimpleTcpSender:";
+
     // used for Fast Retransmit
     struct Ack_buf {
         int ack_num = -1;

@@ -14,6 +14,8 @@ private:
     const int ByteLen; // seq byte len
     const int MOD;
 
+    const string NAME = "SRRdtSender:";
+
     struct packet_buf {
         bool is_acked = false;
         bool is_occupied = false;

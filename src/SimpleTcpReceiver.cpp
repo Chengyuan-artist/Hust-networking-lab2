@@ -70,8 +70,11 @@ void SimpleTcpReceiver::receive(const Packet &packet) {
         }
     } else {
         // packet don't fall in the window, which means it's the old packet in front of the window
-        // resend the ack
+        // resend the newest ack to Synchronize the send window
+
         send_ack(expNum);
+
+        // cout << NAME << "get an old packet " << packet.seqnum << ", ignore it" << endl;
     }
     
 }

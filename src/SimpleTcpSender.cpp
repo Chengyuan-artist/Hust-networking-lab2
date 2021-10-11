@@ -50,30 +50,43 @@ void SimpleTcpSender::receive(const Packet &ackPkt) {
         if (diff <= N && diff > 0) { // ackPkt.acknum > send_base while falling in the window
             // stop the older timer
             pns->stopTimer(SENDER, send_base);
+
             send_base = ackPkt.acknum;
+
+            cout << NAME << "the window is sliding to ";
+            cout << "(";
+            int i;
+            for (i = send_base; (i - send_base + MOD) % MOD < N - 1; i = (i + 1) % MOD) {
+                cout << i << " ";
+            }
+            cout << i << ")" << endl;
+            
 
             if (next_seq != send_base) { // there are currently any not-yet-acked segments
                 pns->startTimer(SENDER, Configuration::TIME_OUT, send_base);
             }
         } else {
-            if(1)  {
-                if (ack_buf.ack_num == ackPkt.acknum) {
+            
+            if (ack_buf.ack_num == ackPkt.acknum) {
                 ack_buf.count ++;
-                } else {
-                    ack_buf.ack_num = ackPkt.acknum;
-                    ack_buf.count = 1;
-                }
-
-                if (ack_buf.count == 3) {
-                    // Fast retransmit
-                    pns->sendToNetworkLayer(RECEIVER, send_buf[ack_buf.ack_num].packet);
-                    ack_buf.count = 0;
-                    ack_buf.ack_num = -1;
-                }
             } else {
-                cout << "SimpleTcpSender::receive:" <<
-                        "Strange thing happens" << endl;
+                ack_buf.ack_num = ackPkt.acknum;
+                ack_buf.count = 1;
             }
+
+            if (ack_buf.count == 3) {
+                // Fast retransmit
+                pns->sendToNetworkLayer(RECEIVER, send_buf[ack_buf.ack_num].packet);
+                
+                cout << NAME << "Fast restransmit " << ack_buf.ack_num << endl;
+
+                ack_buf.count = 0;
+                ack_buf.ack_num = -1;
+            }
+        
+            // cout << "SimpleTcpSender::receive:" <<
+            //         "Strange thing happens" << endl;
+            
         }
     } // else do nothing
 }
