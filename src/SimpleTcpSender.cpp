@@ -71,7 +71,7 @@ void SimpleTcpSender::receive(const Packet &ackPkt) {
                 ack_buf.count ++;
             } else {
                 ack_buf.ack_num = ackPkt.acknum;
-                ack_buf.count = 1;
+                ack_buf.count = 0;
             }
 
             if (ack_buf.count == 3) {
